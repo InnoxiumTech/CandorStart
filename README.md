@@ -13,5 +13,5 @@ This native interface for Candor is currently aimed at being launched with the b
 * Create a new folder in the repo called `run`  
 * Run `cargo build --release`  
 * Copy the `CandorStart` executable from `target/release` in to the `run` folder  
-* Download the candor release currently from [https://github.com/InnoxiumTech/CandorManager/releases] and extract to the `run` folder
+* Download the candor release currently from [here](https://github.com/InnoxiumTech/CandorManager/releases) and extract to the `run` folder
 * Double click the `CandorStart` executable, or run it from a shell
