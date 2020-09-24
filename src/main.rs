@@ -17,7 +17,6 @@ fn main() -> Result<(), Error> {
             .long("url")
             .value_name("URL")
             .about("Sets the url of the mod to download")
-            .required(true)
             .takes_value(true))
         .get_matches();
 
@@ -32,8 +31,6 @@ fn main() -> Result<(), Error> {
         .arg(format!("{}{}", "-javaagent:", candor_jar))
         .arg("-jar")
         .arg(candor_jar)
-        .arg("url")
-        .arg(matches.value_of("url").unwrap())
         .spawn()?
         .stdout
         .ok_or_else(|| Error::new(ErrorKind::Other, "Could not create std out"))?;
