@@ -19,24 +19,34 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v2
+      with:
+        path: "*/*.exe"
       
   build_linux:
     name: Building Linux binaries
     runs-on: ubuntu-latest
+    needs: [build_win]
     steps:
     - uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v2
+      with:
+        path: "*/*.exe"
   
   build_mac:
     name: Building Mac binaries
     runs-on: macos-latest
-
+    needs: [build_linux]
     steps:
     - uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - uses: actions/upload-artifact@v2
+      with:
+        path: "*/*.exe"
