@@ -35,7 +35,7 @@ jobs:
       run: cargo test --verbose
     - uses: actions/upload-artifact@v2
       with:
-        path: target/release//(CandorStart)-([0-9]+)/
+        path: target/release/[CandorStart-]?/
   
   build_mac:
     name: Building Mac binaries
