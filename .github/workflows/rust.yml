@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: cargo build --verbose --release && strip target/release/CandorStart && mv target/release/$CandorStart target/release/CandorStart_linux
+      run: cargo build --verbose --release && strip target/release/CandorStart && mv target/release/CandorStart target/release/CandorStart_linux
     - uses: actions/upload-artifact@v2
       with:
         path: target/release/[CandorStart-]?/
