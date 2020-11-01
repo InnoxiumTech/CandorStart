@@ -1,49 +1,45 @@
-use clap::{Arg, App};
-use std::process::{Command, Stdio};
-use std::io::{BufReader, Error, ErrorKind, BufRead};
+use serde::{Deserialize, Serialize};
+use isahc::ResponseExt;
 
-fn main() -> Result<(), Error> {
+mod update;
 
-    // Define the jar file, as we use it multiple times
-    let candor_jar = "CandorManager-snapshot.jar";
+// Create a version struct allowing us to convert from a string
+pub struct Version {
 
-    // Ask clap to parse our command line, and return a set of matches.
-    let matches = App::new("CandorStart")
-        .version("1.0")
-        .author("Innoxium Tech <innoxium.co.uk>")
-        .about("Launches Candor")
-        .arg(Arg::new("url")
-            .short('u')
-            .long("url")
-            .value_name("URL")
-            .about("Sets the url of the mod to download")
-            .takes_value(true))
-        .get_matches();
+    major: i32,
+    minor: i32,
+    rev: i32,
+    build: i32
+}
 
-    if matches.is_present("url") {
+// How our update data will be laid out
+#[derive(Serialize, Deserialize)]
+struct Update {
 
-        println!("{}", matches.value_of("url").unwrap());
-    }
+    repo: String,
+    tag: String,
+    version: String
+}
 
-    // Create the candor process.
-    let child = Command::new("java")
-        .stdout(Stdio::piped())
-        .arg(format!("{}{}", "-javaagent:", candor_jar))
-        .arg("-jar")
-        .arg(candor_jar)
-        .spawn()?
-        .stdout
-        .ok_or_else(|| Error::new(ErrorKind::Other, "Could not create std out"))?;
+#[derive(Serialize, Deserialize)]
+struct Updates {
 
-    // Create reader for us to pipe in to our own output
-    let reader = BufReader::new(child);
+    updates: Vec<Update>
+}
 
-    // Now we can funnel the output in to our stdout.
-    reader
-        .lines()
-        .filter_map(|line| line.ok())
-        .for_each(|line| println!("{}", line));
+fn main() {
 
-    // Return either the error, or ok
-    Ok(())
+    let updates = get_updates();
+
+    println!("repo is \"{}\", tag is \"{}\", version is \"{}\"", updates.updates[0].repo, updates.updates[0].tag, updates.updates[0].version);
+}
+
+fn get_updates() -> Updates {
+
+    let updates_url: &str = "https://raw.githubusercontent.com/InnoxiumTech/CandorManager/dev/updates/updates.json";
+
+    let mut response = isahc::get(updates_url).unwrap();
+    let body = response.text().unwrap();
+
+    return serde_json::from_str(&*body).unwrap();
 }

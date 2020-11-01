@@ -1,5 +1,5 @@
 [package]
-name = "CandorStart"
+name = "candor_start"
 version = "0.1.0"
 authors = ["ShadowChild <shadychild12@gmail.com>"]
 edition = "2018"
@@ -8,3 +8,6 @@ edition = "2018"
 
 [dependencies]
 clap = "3.0.0-beta.2"
+isahc = "0.9.10"
+serde = { version = "1.0.117", features = ["derive"] }
+serde_json = "1.0.59"
